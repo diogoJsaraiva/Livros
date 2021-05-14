@@ -29,7 +29,7 @@ class TabelaLivro (db: SQLiteDatabase) : BaseColumns  {
         }
 
         fun insert(values: ContentValues): Long {
-            db.insert(NOME_TABELA,null,values)
+            return db.insert(NOME_TABELA,null,values)
         }
 
         fun update(values: ContentValues, whereArgs: Array<String>, whereClause: String): Int {
