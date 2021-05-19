@@ -6,9 +6,9 @@ import org.junit.Assert
 
 import org.junit.Test
 import org.junit.runner.RunWith
-
 import org.junit.Assert.*
 import org.junit.Before
+
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -33,6 +33,18 @@ class TestBaseDados {
         assert(db.isOpen)
         db.close()
 
+    }
+
+    @Test
+    fun consegueInserirCategorias(){
+        val dbOpenHelper = BdLivrosOpenHelper(getAppContext())
+        val db =  dbOpenHelper.writableDatabase
+
+        val categoria = Categoria(nome="Drama")
+        val id = TabelaCategorias(db).insert(categoria.toContentValues())
+        assertNotEquals(-1,id)
+
+        db.close()
     }
 
 
