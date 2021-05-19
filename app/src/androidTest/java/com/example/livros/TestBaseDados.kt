@@ -69,11 +69,26 @@ class TestBaseDados {
 
         val registosAlterados = gettabelaCategorias.update(categoria.toContentValues(),"${BaseColumns._ID}=?",arrayOf(categoria.id.toString()))
         //tabela.Categorias.update()
-         
+
 
         db.close()
     }
 
+    @Test
+    fun consegueApagarCategorias(){
+        val db = GetBdLivrosOpenHelper().writableDatabase
+        val gettabelaCategorias = gettabelaCategorias(db)
+
+        val categoria = Categoria(nome="sci")
+
+        val registosEleminatos = gettabelaCategorias.delete(
+                "${BaseColumns._ID}=?",
+                arrayOf(categoria.id.toString())
+        )
+
+        assertEquals(1,registosEleminatos)
+
+    }
 
 
 }
