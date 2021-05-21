@@ -4,11 +4,12 @@ import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Assert
+
+import org.junit.Assert.*
+
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.Assert.*
 import org.junit.Before
 
 
@@ -43,6 +44,7 @@ class TestBaseDados {
         assert(db.isOpen)
         db.close()
 
+
     }
 
     @Test
@@ -67,8 +69,12 @@ class TestBaseDados {
         categoria.id = inserirCategoria(gettabelaCategorias,categoria)
         categoria.nome = "sci-fi"
 
-        val registosAlterados = gettabelaCategorias.update(categoria.toContentValues(),"${BaseColumns._ID}=?",arrayOf(categoria.id.toString()))
-        //tabela.Categorias.update()
+        val registosAlterados = gettabelaCategorias.update(
+                categoria.toContentValues(),"${BaseColumns._ID}=?",
+                arrayOf(categoria.id.toString())
+        )
+
+        assertEquals(1, registosAlterados)
 
 
         db.close()
@@ -80,6 +86,7 @@ class TestBaseDados {
         val gettabelaCategorias = gettabelaCategorias(db)
 
         val categoria = Categoria(nome="sci")
+        categoria.id = inserirCategoria(gettabelaCategorias,categoria)
 
         val registosEleminatos = gettabelaCategorias.delete(
                 "${BaseColumns._ID}=?",
@@ -89,6 +96,27 @@ class TestBaseDados {
         assertEquals(1,registosEleminatos)
 
     }
+
+    @Test
+    fun consegueLerCategorias(){
+        val db = GetBdLivrosOpenHelper().writableDatabase
+        val gettabelaCategorias = gettabelaCategorias(db)
+        val categoria = Categoria(nome="sci")
+        categoria.id = inserirCategoria(gettabelaCategorias,categoria)
+
+        val cursor = gettabelaCategorias.query(
+                TabelaCategorias.TODOS_CAMPOS,
+                "${BaseColumns._ID}=?",
+                arrayOf(categoria.id.toString()),
+                null,null,null
+        )
+
+        assertNotNull(cursor)
+        assert(cursor!!.moveToNext())
+
+       
+    }
+
 
 
 }
