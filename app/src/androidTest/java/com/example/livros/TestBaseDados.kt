@@ -142,7 +142,7 @@ class TestBaseDados {
         assertNotNull(cursor)
         assert(cursor!!.moveToNext())
 
-
+        return(Livro.fromCursor(cursor))
     }
 
 
