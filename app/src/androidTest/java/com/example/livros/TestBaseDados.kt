@@ -165,7 +165,7 @@ class TestBaseDados {
 
         livro.id = inserirLivro(tabelaLivro,livro)
 
-        assertEquals(livro,getLivroBaseDados(tabelaLivro,categoria.id))
+        assertEquals(livro,getLivroBaseDados(tabelaLivro,livro.id))
 
 
         db.close()
