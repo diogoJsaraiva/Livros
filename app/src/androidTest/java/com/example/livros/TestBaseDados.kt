@@ -24,11 +24,22 @@ class TestBaseDados {
     private fun GetBdLivrosOpenHelper() = BdLivrosOpenHelper(getAppContext())
     private fun gettabelaCategorias(db: SQLiteDatabase) = TabelaCategorias(db)
 
+
     private fun inserirCategoria(gettabelaCategorias: TabelaCategorias, categoria: Categoria) : Long {
         val id = gettabelaCategorias.insert(categoria.toContentValues())
         assertNotEquals(-1, id)
         return id
     }
+
+    private fun inserirLivro(tabela: TabelaLivro, livro: Livro ) : Long {
+        val id = tabela.insert(livro.toContentValues())
+        assertNotEquals(-1, id)
+        return id
+    }
+
+
+
+
 
 
     @Before
@@ -57,6 +68,10 @@ class TestBaseDados {
 
         db.close()
     }
+
+
+
+
 
     @Test
     fun consegueAlterarCategorias{
@@ -115,6 +130,45 @@ class TestBaseDados {
         assert(cursor!!.moveToNext())
 
        
+    }
+
+    private fun getLivroBaseDados(tabela: TabelaLivro , id:Long){
+        val cursor = tabela.query(
+            TabelaLivro.TODOS_CAMPOS,
+            "${BaseColumns._ID} =?",
+            arrayOf(id.toString()),
+            null,null,null
+        )
+        assertNotNull(cursor)
+        assert(cursor!!.moveToNext())
+
+
+    }
+
+
+
+
+
+
+
+
+    @Test
+    fun consegueInserirLivros(){
+        val db = GetBdLivrosOpenHelper().writableDatabase
+        val tabelaCategorias = TabelaCategorias(db)
+
+        val categoria = Categoria(nome="Drama")
+        categoria.id = inserirCategoria(tabelaCategorias, categoria)
+
+        val tabelaLivro = TabelaLivro(db)
+        val livro = Livro(titulo = "O l~eao que temos Cá Dentro",autor = "Rachel Bright",idCategoria =  categoria.id)
+
+        livro.id = inserirLivro(tabelaLivro,livro)
+
+        assertEquals(livro,getLivroBaseDados(tabelaLivro,categoria.id))
+
+
+        db.close()
     }
 
 
