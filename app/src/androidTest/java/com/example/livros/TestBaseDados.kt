@@ -200,6 +200,8 @@ class TestBaseDados {
         assertEquals(livro,getLivroBaseDados(tabelaLivro,livro.id))
         db.close()
     }
+
+    @Test
     fun consegueEliminarLivros(){
         val db = GetBdLivrosOpenHelper().writableDatabase
 
@@ -221,5 +223,28 @@ class TestBaseDados {
         assertEquals(1,registosEleminatos)
 
     }
+
+    @Test
+    fun consegueLerLivros(){
+        val db = GetBdLivrosOpenHelper().writableDatabase
+
+        val gettabelaCategorias = gettabelaCategorias(db)
+        val categoria = Categoria(nome="Culinária")
+        categoria.id = inserirCategoria(gettabelaCategorias,categoria)
+
+
+        val tabelaLivro = TabelaLivro(db)
+        val livro = Livro(titulo = "Chef profissional",autor = "Instituto Americado de culinaria",idCategoria =  categoria.id)
+        livro.id = inserirLivro(tabelaLivro,livro)
+
+
+
+       assertEquals(livro,getLivroBaseDados(tabelaLivro,livro.id))
+
+
+
+    }
+
+
 
 }
