@@ -161,7 +161,7 @@ class TestBaseDados {
         categoria.id = inserirCategoria(tabelaCategorias, categoria)
 
         val tabelaLivro = TabelaLivro(db)
-        val livro = Livro(titulo = "O l~eao que temos Cá Dentro",autor = "Rachel Bright",idCategoria =  categoria.id)
+        val livro = Livro(titulo = "O leão que temos Cá Dentro",autor = "Rachel Bright",idCategoria =  categoria.id)
 
         livro.id = inserirLivro(tabelaLivro,livro)
 
@@ -171,6 +171,35 @@ class TestBaseDados {
         db.close()
     }
 
+
+    @Test
+    fun consegueAlterarLivros{
+        val db = GetBdLivrosOpenHelper().writableDatabase
+
+        val categoria = Categoria(nome="Mistério")
+        val gettabelaCategorias = gettabelaCategorias(db)
+        categoria.id = inserirCategoria(gettabelaCategorias,categoria)
+
+        val tabelaLivro = TabelaLivro(db)
+        val livro = Livro(titulo = "Ninffeias negras",autor = "Michel Bussi",idCategoria =  categoria.id)
+
+        livro.id = inserirLivro(tabelaLivro,livro)
+
+        livro.titulo="Ninffeias negras"
+        livro.autor="Michel Bussi"
+
+
+        val registosAlterados = tabelaLivro.update(
+            livro.toContentValues(),
+            "${BaseColumns._ID}=?",
+            arrayOf(livro.id.toString())
+        )
+
+        assertEquals(1, registosAlterados)
+
+        assertEquals(livro,getLivroBaseDados(tabelaLivro,livro.id))
+        db.close()
+    }
 
 
 }
