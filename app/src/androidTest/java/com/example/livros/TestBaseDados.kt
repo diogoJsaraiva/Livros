@@ -200,6 +200,26 @@ class TestBaseDados {
         assertEquals(livro,getLivroBaseDados(tabelaLivro,livro.id))
         db.close()
     }
+    fun consegueEliminarLivros(){
+        val db = GetBdLivrosOpenHelper().writableDatabase
 
+        val gettabelaCategorias = gettabelaCategorias(db)
+        val categoria = Categoria(nome="sci")
+        categoria.id = inserirCategoria(gettabelaCategorias,categoria)
+
+        val tabelaLivro = TabelaLivro(db)
+        val livro = Livro(titulo = "Ninffeias negras",autor = "Michel Bussi",idCategoria =  categoria.id)
+
+        livro.id = inserirLivro(tabelaLivro,livro)
+
+
+        val registosEleminatos = tabelaLivro.delete(
+            "${BaseColumns._ID}=?",
+            arrayOf(livro.id.toString())
+        )
+
+        assertEquals(1,registosEleminatos)
+
+    }
 
 }
