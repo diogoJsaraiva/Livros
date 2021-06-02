@@ -148,7 +148,14 @@ class ContentProviderLivros: ContentProvider() {
         // UriMatcher
 
         //  "vnd.android.cursor.dir/$LIVROS"
-        
+        return when (getUriMatcher().match(uri)){
+            URI_LIVROS -> "$MULTIPLOS_ITEM/$LIVROS"
+            URI_LIVRO_ESPECIFICO -> "$UNICO_ITEM/$LIVROS"
+            URI_CATEGORIAS -> "$MULTIPLOS_ITEM/$CATEGORIAS"
+            URI_CATEGORIAS_ESPECIFICA -> "$UNICO_ITEM/$CATEGORIAS"
+
+            else -> null
+        }
 
     }
 
