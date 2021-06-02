@@ -118,9 +118,10 @@ class ContentProviderLivros: ContentProvider() {
         selectionArgs: Array<out String>?,
         sortOrder: String?
     ): Cursor? {
+
+
+
         val bd = bdLivrosOpenHelper!!.readableDatabase
-
-
 
         return when (getUriMatcher().match(uri)){
             URI_LIVROS -> TabelaLivro(bd).query(
@@ -239,9 +240,26 @@ class ContentProviderLivros: ContentProvider() {
      * @throws SQLException
      */
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
-        TODO("Not yet implemented")
-    }
+        val bd = bdLivrosOpenHelper!!.writableDatabase
 
+        return when (getUriMatcher().match(uri)) {
+            URI_LIVROS -> 0
+            URI_LIVRO_ESPECIFICO -> TabelaLivro(bd).delete(
+                "${BaseColumns._ID}=?",
+                arrayOf(uri.lastPathSegment!!), //id
+
+            )
+            URI_CATEGORIAS -> 0
+
+            URI_CATEGORIAS_ESPECIFICA -> TabelaCategorias(bd).delete(
+                "${BaseColumns._ID}=?",
+                arrayOf(uri.lastPathSegment!!), //id
+
+            )
+
+            else -> 0
+        }
+    }
     /**
      * Implement this to handle requests to update one or more rows. The
      * implementation should update all rows matching the selection to set the
@@ -263,7 +281,27 @@ class ContentProviderLivros: ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?
     ): Int {
-        TODO("Not yet implemented")
+        val bd = bdLivrosOpenHelper!!.writableDatabase
+
+        return when (getUriMatcher().match(uri)){
+            URI_LIVROS -> 0
+            URI_LIVRO_ESPECIFICO -> TabelaLivro(bd).update(
+                values!!,
+                "${BaseColumns._ID}=?",
+                arrayOf(uri.lastPathSegment!!), //id
+
+            )
+            URI_CATEGORIAS ->0
+
+            URI_CATEGORIAS_ESPECIFICA -> TabelaCategorias(bd).update(
+                values!!,
+                "${BaseColumns._ID}=?",
+                arrayOf(uri.lastPathSegment!!), //id
+
+            )
+
+            else -> 0
+        }
     }
 
     companion object{
