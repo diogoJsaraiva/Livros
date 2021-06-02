@@ -213,7 +213,17 @@ class ContentProviderLivros: ContentProvider() {
      * @return The URI for the newly inserted item.
      */
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        TODO("Not yet implemented")
+        val bd = bdLivrosOpenHelper!!.writableDatabase
+
+        val id = when (getUriMatcher().match(uri)){
+            URI_LIVROS -> TabelaLivro(bd).insert(values!!)
+            URI_CATEGORIAS ->TabelaCategorias(bd).insert(values!!)
+            else -> -1L
+        }
+        // content :// pt.ipg.livros/livros
+        // 7
+        if( id == -1L) return null
+        return Uri.withAppendedPath(uri, id.toString())
     }
 
     /**
@@ -243,13 +253,11 @@ class ContentProviderLivros: ContentProvider() {
         val bd = bdLivrosOpenHelper!!.writableDatabase
 
         return when (getUriMatcher().match(uri)) {
-            URI_LIVROS -> 0
             URI_LIVRO_ESPECIFICO -> TabelaLivro(bd).delete(
                 "${BaseColumns._ID}=?",
                 arrayOf(uri.lastPathSegment!!), //id
 
             )
-            URI_CATEGORIAS -> 0
 
             URI_CATEGORIAS_ESPECIFICA -> TabelaCategorias(bd).delete(
                 "${BaseColumns._ID}=?",
@@ -260,6 +268,7 @@ class ContentProviderLivros: ContentProvider() {
             else -> 0
         }
     }
+
     /**
      * Implement this to handle requests to update one or more rows. The
      * implementation should update all rows matching the selection to set the
