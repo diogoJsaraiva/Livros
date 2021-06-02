@@ -2,6 +2,7 @@ package com.example.livros
 
 import android.content.ContentProvider
 import android.content.ContentValues
+import android.content.UriMatcher
 import android.database.Cursor
 import android.net.Uri
 
@@ -41,8 +42,9 @@ class ContentProviderLivros: ContentProvider() {
 
     }
 
-    /**
-     * Implement this to handle query requests from clients.
+
+
+    /** Implement this to handle query requests from clients.
      *
      *
      * Apps targeting [android.os.Build.VERSION_CODES.O] or higher should override
@@ -138,7 +140,16 @@ class ContentProviderLivros: ContentProvider() {
      * @return a MIME type string, or `null` if there is no type.
      */
     override fun getType(uri: Uri): String? {
-        TODO("Not yet implemented")
+        // .../livros (cursor)
+        // .../livros/6 (item)
+        // .../categorias (cursor)
+        // .../categorias/3 (item)
+        // .../filmes (não existe)
+        // UriMatcher
+
+        //  "vnd.android.cursor.dir/$LIVROS"
+        
+
     }
 
     /**
@@ -208,5 +219,36 @@ class ContentProviderLivros: ContentProvider() {
         TODO("Not yet implemented")
     }
 
+    companion object{
+        private const val AUTHORITY = "com.example.livros"
+        private const val LIVROS = "livros"
+        private const val CATEGORIAS = "categorias"
+
+        private const val URI_LIVROS = 100
+        private const val URI_LIVRO_ESPECIFICO = 101
+        private const val URI_CATEGORIAS = 200
+        private const val URI_CATEGORIAS_ESPECIFICA = 200
+
+        private const val MULTIPLOS_ITEM = "vnd.android.cursor.dir"
+        private const val UNICO_ITEM = "vnd.android.cursor.item"
+
+        private fun getUriMatcher() : UriMatcher {
+            val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
+
+            // content://com.example.livros/livros
+            // content://com.example.livros/categorias
+
+
+            uriMatcher.addURI(AUTHORITY,LIVROS,URI_LIVROS )
+            uriMatcher.addURI(AUTHORITY,"$LIVROS/#", URI_LIVRO_ESPECIFICO)
+            uriMatcher.addURI(AUTHORITY, CATEGORIAS,URI_CATEGORIAS)
+            uriMatcher.addURI(AUTHORITY,"$CATEGORIAS/#",URI_CATEGORIAS_ESPECIFICA)
+
+
+
+           return uriMatcher
+
+        }
+    }
 
 }
