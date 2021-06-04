@@ -315,6 +315,7 @@ class ContentProviderLivros: ContentProvider() {
 
     companion object{
         private const val AUTHORITY = "com.example.livros"
+
         private const val LIVROS = "livros"
         private const val CATEGORIAS = "categorias"
 
@@ -325,6 +326,10 @@ class ContentProviderLivros: ContentProvider() {
 
         private const val MULTIPLOS_ITEM = "vnd.android.cursor.dir"
         private const val UNICO_ITEM = "vnd.android.cursor.item"
+
+        private val ENDERECO_BASE = Uri.parse("content://$AUTHORITY")
+        public val ENDERECO_LIVROS = Uri.withAppendedPath(ENDERECO_BASE, LIVROS)
+        public val ENDERECO_CATEGORIAS = Uri.withAppendedPath(ENDERECO_BASE, CATEGORIAS)
 
         private fun getUriMatcher() : UriMatcher {
             val uriMatcher = UriMatcher(UriMatcher.NO_MATCH)
