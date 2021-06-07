@@ -10,6 +10,8 @@ class BdLivrosOpenHelper(context: Context?
         if (db != null) {
             TabelaCategorias(db).cria()
             TabelaLivro(db).cria()
+
+
         }
     }
 

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class AdapterLivros(var cursor: Cursor? = null):RecyclerView.Adapter<AdapterLivros.ViewHolderLivro>() {
+class AdapterLivros( val fragment: ListaLivrosFragment,var cursor: Cursor? = null):RecyclerView.Adapter<AdapterLivros.ViewHolderLivro>() {
     class ViewHolderLivro(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
@@ -34,7 +34,8 @@ class AdapterLivros(var cursor: Cursor? = null):RecyclerView.Adapter<AdapterLivr
      * @see .onBindViewHolder
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderLivro {
-        TODO("Not yet implemented")
+        val itemLivro = fragment.layoutInflater.inflate(R.layout.item_livro,parent,false)
+        return ViewHolderLivro(itemLivro)
     }
 
     /**
@@ -59,7 +60,7 @@ class AdapterLivros(var cursor: Cursor? = null):RecyclerView.Adapter<AdapterLivr
      * @param position The position of the item within the adapter's data set.
      */
     override fun onBindViewHolder(holder: ViewHolderLivro, position: Int) {
-        TODO("Not yet implemented")
+
     }
 
     /**
@@ -68,6 +69,6 @@ class AdapterLivros(var cursor: Cursor? = null):RecyclerView.Adapter<AdapterLivr
      * @return The total number of items in this adapter.
      */
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+       return cursor?.count ?: 0
     }
 }
