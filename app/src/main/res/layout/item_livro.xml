@@ -21,4 +21,17 @@
         android:layout_margin="@dimen/margem_campos"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         tools:text="Rachel Bright" />
+
+    <TextView
+        android:id="@+id/textViewCategoria"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margem_campos"
+        android:layout_marginLeft="@dimen/margem_campos"
+        android:layout_marginTop="@dimen/margem_campos"
+        android:layout_marginEnd="@dimen/margem_campos"
+        android:layout_marginRight="@dimen/margem_campos"
+        android:gravity="left|end"
+        android:textColor="@color/corDestaque"
+        tools:text="aventura" />
 </LinearLayout>

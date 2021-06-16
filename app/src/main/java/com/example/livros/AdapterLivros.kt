@@ -1,9 +1,11 @@
 package com.example.livros
 
+import android.annotation.SuppressLint
 import android.database.Cursor
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class AdapterLivros( val fragment: ListaLivrosFragment):RecyclerView.Adapter<AdapterLivros.ViewHolderLivro>() {
@@ -14,15 +16,58 @@ class AdapterLivros( val fragment: ListaLivrosFragment):RecyclerView.Adapter<Ada
         notifyDataSetChanged()
     }
 
-    class ViewHolderLivro(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolderLivro(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private val textViewTitulo = itemView.findViewById<TextView>(R.id.textViewTitulo)
         private val textViewAutor= itemView.findViewById<TextView>(R.id.textViewAutor)
+        private val textViewCategoria = itemView.findViewById<TextView>(R.id.textViewCategoria)
+
+        internal var livro : Livro? = null
+
+
+
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         fun atualizaLivro(livro: Livro){
+            this.livro = livro
+
             textViewTitulo.text = livro.titulo
             textViewAutor.text = livro.autor
+            textViewCategoria.text = livro.nomeCategoria
+        }
+
+
+
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+        override fun onClick(v: View?) {
+            selecionado?.desseleciona()
+            seleciona()
+        }
+
+
+        private fun seleciona() {
+            selecionado = this
+            itemView.setBackgroundResource(R.color.cor_selecao)
+        }
+
+        private fun desseleciona() {
+            itemView.setBackgroundResource(android.R.color.white)
+        }
+
+        companion object{
+            var selecionado: ViewHolderLivro? = null
         }
     }
+        companion object{
+            fun getLivroSelecionado() = ViewHolderLivro.selecionado?.livro
+        }
 
     /**
      * Called when RecyclerView needs a new [ViewHolder] of the given type to represent

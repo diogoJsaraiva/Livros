@@ -36,48 +36,43 @@ class TabelaLivro (db: SQLiteDatabase) : BaseColumns  {
                 orderBy: String?
         ): Cursor? {
             val ultimaColuna = columns.size -1
-            var posCampoNomeCategoria = -1 // indica que não foi pedido
+            var posColNomeCategoria = -1 // indica que não foi pedido
             for(i in 0..ultimaColuna){
                 if(columns[i] == CAMPO_EXTERNO_NOME_CATEGORIA){
-                    posCampoNomeCategoria = i
+                    posColNomeCategoria = i
                     break
                 }
             }
 
-            if(posCampoNomeCategoria == -1){ // nao existe campo de outra tabela
+            if(posColNomeCategoria == -1){ // nao existe campo de outra tabela
                 return db.query(NOME_TABELA,columns,selection,selectionArgs,groupBy,having,orderBy)
             }
 
             var colunas = ""
-            for(i in 0..ultimaColuna){
+            for (i in 0..ultimaColuna) {
+                if (i > 0) colunas += ","
 
-                var nomecoluna =  if( i == posCampoNomeCategoria){
+                colunas += if (i == posColNomeCategoria) {
                     "${TabelaCategorias.NOME_TABELA}.${TabelaCategorias.CAMPO_NOME} AS $CAMPO_EXTERNO_NOME_CATEGORIA"
-                }else{
-                    "$NOME_TABELA.${columns[i]}"
+                } else {
+                    "${NOME_TABELA}.${columns[i]}"
                 }
-
-
-                if(i>0) colunas += ","
-
-                colunas += nomecoluna
             }
 
-            val tabelas = " $NOME_TABELA INNER JOIN ${TabelaCategorias.NOME_TABELA} ON  ${TabelaCategorias.NOME_TABELA}.${BaseColumns._ID} =$NOME_TABELA.$CAMPO_ID_CATEGORIA"
+            val tabelas = "$NOME_TABELA INNER JOIN ${TabelaCategorias.NOME_TABELA} ON ${TabelaCategorias.NOME_TABELA}.${BaseColumns._ID}=$CAMPO_ID_CATEGORIA"
 
-            var sqlAdicional = ""
-            if (selection != null) sqlAdicional += "WHERE $selection"
-             if (groupBy != null){
-                 sqlAdicional += "GROUP BY $groupBy"
-                if (having != null) sqlAdicional += "HAVING $having"
-             }
+            var sql = "SELECT $colunas FROM $tabelas"
 
-            if(orderBy != null){
-               // sqlAdicional += "ODER BY $orderBy"
+            if (selection != null) sql += " WHERE $selection"
+
+            if (groupBy != null) {
+                sql += " GROUP BY $groupBy"
+                if (having != null) " HAVING $having"
             }
 
-            return db.rawQuery("SELECT $colunas FROM $tabelas $sqlAdicional",selectionArgs)
-            //... Livros INNER JOIN categorias ON categorias._id = categorias.id_categoria
+            if (orderBy != null) sql += " ORDER BY $orderBy"
+
+            return db.rawQuery(sql, selectionArgs)
         }
 
         //CRUD
