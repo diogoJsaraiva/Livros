@@ -9,6 +9,10 @@ import android.view.MenuItem
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var menu: Menu
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -23,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_lista_seminarios, menu)
+        this.menu = menu
+        atualizaMenuListaLivros(false)
         return true
     }
 
@@ -34,5 +40,12 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+
+    public fun atualizaMenuListaLivros(permiteAlterarEliminar : Boolean) {
+        menu.findItem(R.id.action_alterar_livro).setVisible(permiteAlterarEliminar)
+        menu.findItem(R.id.action_eliminar_livro).setVisible(permiteAlterarEliminar)
+        //invalidateOptionsMenu()
     }
 }
